@@ -59,43 +59,55 @@ data6.freq = ts_imuw.data(:,3)';
 
 fprintf('calculating allan deviation.\n');
 tic;
-cluster = parcluster();
-j1 = batch(cluster,@allan,1,{data1,tau});
-j2 = batch(cluster,@allan,1,{data2,tau});
-j3 = batch(cluster,@allan,1,{data3,tau});
-j4 = batch(cluster,@allan,1,{data4,tau});
-j5 = batch(cluster,@allan,1,{data5,tau});
-j6 = batch(cluster,@allan,1,{data6,tau});
-
-% Wait for the jobs to finish
-wait(j1)
-wait(j2)
-wait(j3)
-wait(j4)
-wait(j5)
-wait(j6)
-
-% Get results into a cell array
-r1 = fetchOutputs(j1);
-r2 = fetchOutputs(j2);
-r3 = fetchOutputs(j3);
-r4 = fetchOutputs(j4);
-r5 = fetchOutputs(j5);
-r6 = fetchOutputs(j6);
-results_ax = r1{1};
-results_ay = r2{1};
-results_az = r3{1};
-results_wx = r4{1};
-results_wy = r5{1};
-results_wz = r6{1};
+% cluster = parcluster();
+% j1 = batch(cluster,@allan,1,{data1,tau});
+% j2 = batch(cluster,@allan,1,{data2,tau});
+% j3 = batch(cluster,@allan,1,{data3,tau});
+% j4 = batch(cluster,@allan,1,{data4,tau});
+% j5 = batch(cluster,@allan,1,{data5,tau});
+% j6 = batch(cluster,@allan,1,{data6,tau});
+% 
+% % Wait for the jobs to finish
+% wait(j1)
+% wait(j2)
+% wait(j3)
+% wait(j4)
+% wait(j5)
+% wait(j6)
+% 
+% % Get results into a cell array
+% r1 = fetchOutputs(j1);
+% r2 = fetchOutputs(j2);
+% r3 = fetchOutputs(j3);
+% r4 = fetchOutputs(j4);
+% r5 = fetchOutputs(j5);
+% r6 = fetchOutputs(j6);
+r1 = allan(data1, tau);
+r2 = allan(data2, tau);
+r3 = allan(data3, tau);
+r4 = allan(data4, tau);
+r5 = allan(data5, tau);
+r6 = allan(data6, tau);
+results_ax = r1;
+results_ay = r2;
+results_az = r3;
+results_wx = r4;
+results_wy = r5;
+results_wz = r6;
+% results_ax = r1{1};
+% results_ay = r2{1};
+% results_az = r3{1};
+% results_wx = r4{1};
+% results_wy = r5{1};
+% results_wz = r6{1};
 
 % Finally cleanup
-delete(j1)
-delete(j2)
-delete(j3)
-delete(j4)
-delete(j5)
-delete(j6)
+% delete(j1)
+% delete(j2)
+% delete(j3)
+% delete(j4)
+% delete(j5)
+% delete(j6)
 toc
 
 %% Save workspace
@@ -103,7 +115,3 @@ filename = ['results_',datestr(now,30),'.mat'];
 fprintf('saving to: %s\n',filename);
 save(['../data/',filename],'update_rate','ts_imua','ts_imuw','tau','taumax','results_ax','results_ay','results_az','results_wx','results_wy','results_wz')
 fprintf('done saving!\n');
-
-
-
-
